@@ -1,2 +1,4 @@
-# autoflex-teste-pratico
-Autoflex - Desenvolvedor Full Stack - Teste técnico
+# Autoflex - Teste Prático
+
+Projeto designado ao teste prático da empresa Projetada.
+
