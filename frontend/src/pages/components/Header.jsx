@@ -19,7 +19,7 @@ function Header() {
               <Link className="nav-link link-warning" to="/factory-management">Profile</Link>
             </li>
             <li className="nav-item">
-              <button type="button" className="btn btn-outline-light" onClick={signOut}>Sair</button>
+              <button type="button" className="btn btn-outline-light" onClick={signOut}>Logout</button>
             </li>
           </ul>
         </div>

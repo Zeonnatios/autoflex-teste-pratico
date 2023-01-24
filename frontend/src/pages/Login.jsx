@@ -63,11 +63,11 @@ function Login() {
 
       <section>
         <form>
-          <h1 className="h1" id="title">Login</h1>
+          <h1 className="h1" id="title">Logon</h1>
 
           <div className="form-group row">
-            <label id="labelUserName" htmlFor="email" className="col-lg-12col-form-label">
-              Username:
+            <label id="labelEmail" htmlFor="email" className="col-lg-12col-form-label">
+              Email:
               <div className="col-lg-12">
                 <input
                   className="form-control"
@@ -116,7 +116,7 @@ function Login() {
             data-testid="login-submit-btn"
             onClick={() => navigate('/register')}
           >
-            Ainda não tenho conta
+            I do not have an account yet
           </button>
         </form>
 

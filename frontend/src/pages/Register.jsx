@@ -55,11 +55,11 @@ function Register() {
 
       <section>
         <form>
-          <h1 className="h1" id="title">Criar conta</h1>
+          <h1 className="h1" id="title">Create Account</h1>
 
           <div className="form-group row">
             <label id="labelUserName" htmlFor="name" className="col-lg-12col-form-label">
-              Username:
+              Name:
               <div className="col-lg-12">
                 <input
                   className="form-control"
@@ -116,7 +116,7 @@ function Register() {
             disabled={btnDisable}
             onClick={() => signUp()}
           >
-            Cadastrar-se
+            Register
           </button>
 
         </form>
