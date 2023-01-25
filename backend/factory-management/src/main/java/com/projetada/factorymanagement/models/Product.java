@@ -1,6 +1,7 @@
 package com.projetada.factorymanagement.models;
 
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.UUID;
 
