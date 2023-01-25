@@ -27,7 +27,7 @@ public class ProductController {
         if (productService.existsByName(productDto.getName())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Product already exists!");
         }
-        var product = new Product();
+        Product product = new Product();
         BeanUtils.copyProperties(productDto, product);
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
@@ -47,13 +47,26 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletProduct(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id) {
         Optional<Product> productOptional = productService.findById(id);
         if (productOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found !");
         }
         productService.delete(productOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully !");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
+                                                @RequestBody @Valid ProductDto productDto) {
+        Optional<Product> productOptional = productService.findById(id);
+        if (productOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found !");
+        }
+        Product product = new Product();
+        BeanUtils.copyProperties(productDto, product);
+        product.setId(productOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 
 }
