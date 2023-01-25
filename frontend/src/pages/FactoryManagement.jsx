@@ -1,7 +1,8 @@
+/* eslint linebreak-style: ["error", "windows"] */
 import React from 'react';
 import Header from './components/Header';
 
-function FactoryManagement() {
+function Profile() {
   return (
 
     <div>
@@ -11,4 +12,4 @@ function FactoryManagement() {
   );
 }
 
-export default FactoryManagement;
+export default Profile;

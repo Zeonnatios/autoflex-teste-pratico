@@ -19,6 +19,12 @@ function Header() {
               <Link className="nav-link link-warning" to="/factory-management">Profile</Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link link-warning" to="/products">Products</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link link-warning" to="/raw-material">Raw Material</Link>
+            </li>
+            <li className="nav-item">
               <button type="button" className="btn btn-outline-light" onClick={signOut}>Logout</button>
             </li>
           </ul>

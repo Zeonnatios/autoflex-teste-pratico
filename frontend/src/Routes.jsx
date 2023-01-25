@@ -7,7 +7,7 @@ import FactoryManagement from './pages/FactoryManagement';
 function Router() {
   return (
     <Routes>
-      <Route exact path="/" element={<Navigate to="/login" />} />
+      <Route exact path="/" element={<Navigate to="/factory-management" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/factory-management" element={<FactoryManagement />} />
