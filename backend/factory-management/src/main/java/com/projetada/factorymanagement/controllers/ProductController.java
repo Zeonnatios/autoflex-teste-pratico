@@ -40,10 +40,20 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id") UUID id) {
         Optional<Product> productOptional = productService.findById(id);
-        if(!productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product is not found !");
+        if (productOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found !");
         }
         return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletProduct(@PathVariable(value = "id") UUID id) {
+        Optional<Product> productOptional = productService.findById(id);
+        if (productOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found !");
+        }
+        productService.delete(productOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully !");
     }
 
 }
