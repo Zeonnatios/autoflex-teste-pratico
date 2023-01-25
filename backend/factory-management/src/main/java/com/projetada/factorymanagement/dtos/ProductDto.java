@@ -1,15 +1,16 @@
 package com.projetada.factorymanagement.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class ProductDto {
 
     @NotBlank
+    @Size(max = 70)
     private String name;
 
-    @NotBlank
-    @Size(max = 100)
+    @NotNull
     private double value;
 
     public String getName() {
