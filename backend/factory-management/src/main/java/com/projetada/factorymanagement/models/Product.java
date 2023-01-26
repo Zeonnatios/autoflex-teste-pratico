@@ -17,7 +17,7 @@ public class Product implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
     @Column(nullable = false)
-    private double value;
+    private Double value;
 
     public UUID getId() {
         return id;
@@ -35,11 +35,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 }

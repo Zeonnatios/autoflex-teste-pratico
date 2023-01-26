@@ -4,14 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class ProductDto {
+public class MaterialDto {
 
     @NotBlank
     @Size(max = 100)
     private String name;
 
     @NotNull
-    private Double value;
+    private Integer stock;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class ProductDto {
         this.name = name;
     }
 
-    public Double getValue() {
-        return value;
+    public Integer getStock() {
+        return stock;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

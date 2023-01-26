@@ -19,5 +19,27 @@ public class Material implements Serializable {
     @Column(nullable = false)
     private Integer stock;
 
+    public UUID getId() {
+        return id;
+    }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }
