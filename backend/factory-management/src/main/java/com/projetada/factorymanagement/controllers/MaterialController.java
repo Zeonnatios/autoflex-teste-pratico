@@ -65,7 +65,7 @@ public class MaterialController {
         Material material = new Material();
         BeanUtils.copyProperties(materialDto, material);
         material.setId(materialOptional.get().getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(materialService.save(material));
+        return ResponseEntity.status(HttpStatus.OK).body(materialService.save(material));
     }
 
 }
