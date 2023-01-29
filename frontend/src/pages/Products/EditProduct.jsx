@@ -1,19 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../../services/axios';
 import Header from '../components/Header';
+import Message from '../components/Message';
 
 function EditProduct() {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
-  const [product, setProduct] = useState({ name: '', value: 0 });
-  function handleChange({ target: { name, value } }) {
-    setProduct({ ...product, [name]: value });
-  }
+  const [name, setName] = useState('');
+  const [value, setValue] = useState(0);
+  const [message, setMessage] = useState('');
+  const editProduct = async () => {
+    const response = await axios.put(`product/${id}`, { name, value });
+    if (response.status === 200) await setMessage('Successfully changed data');
+  };
+
+  useEffect(() => {
+    const getProductById = async () => {
+      const { data } = await axios.get(`/product/${id}`);
+      setName(data.name);
+      setValue(data.value);
+    };
+
+    getProductById();
+  }, [id]);
 
   return (
     <div>
       <Header />
+      {message !== '' && <Message text={message} />}
 
       <h3 className="d-flex justify-content-center py-3">Edit product</h3>
 
@@ -29,7 +44,8 @@ function EditProduct() {
                 placeholder="name"
                 name="name"
                 id="name"
-                onKeyUp={handleChange}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </label>
@@ -46,14 +62,15 @@ function EditProduct() {
                 name="value"
                 id="value"
                 min={0}
-                onKeyUp={handleChange}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
                 required
               />
             </label>
           </div>
 
           <div className="d-flex justify-content-around py-4">
-            <button type="button" className="btn btn-outline-success">
+            <button type="button" className="btn btn-outline-success" onClick={editProduct}>
               Submit
             </button>
             <button type="button" className="btn btn-outline-danger" onClick={() => navigate('/products')}>Cancel</button>

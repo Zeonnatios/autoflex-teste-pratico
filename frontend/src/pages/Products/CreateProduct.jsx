@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import axios from '../../services/axios';
 
 function CreateProduct() {
   const navigate = useNavigate();
@@ -9,6 +10,10 @@ function CreateProduct() {
   function handleChange({ target: { name, value } }) {
     setProduct({ ...product, [name]: value });
   }
+
+  const createProduct = async () => {
+    axios.post('product', { ...product });
+  };
 
   return (
     <div>
@@ -52,7 +57,7 @@ function CreateProduct() {
           </div>
 
           <div className="d-flex justify-content-around py-4">
-            <button type="button" className="btn btn-outline-success">
+            <button type="button" className="btn btn-outline-success" onClick={createProduct}>
               Submit
             </button>
             <button type="button" className="btn btn-outline-danger" onClick={() => navigate('/products')}>Cancel</button>
