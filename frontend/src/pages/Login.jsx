@@ -66,7 +66,7 @@ function Login() {
           <h1 className="h1" id="title">Logon</h1>
 
           <div className="form-group row">
-            <label id="labelEmail" htmlFor="email" className="col-lg-12col-form-label">
+            <label id="labelEmail" htmlFor="email" className="col-lg-12 col-form-label">
               Email:
               <div className="col-lg-12">
                 <input
