@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../../services/axios';
 import Header from '../components/Header';
+import Message from '../components/Message';
 
 function EditRawMaterial() {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
-  const [material, setMaterial] = useState({ name: '', stock: 0 });
-  function handleChange({ target: { name, value } }) {
-    setMaterial({ ...material, [name]: value });
-  }
+
+  const [name, setName] = useState('');
+  const [stock, setStock] = useState(0);
+  const [message, setMessage] = useState('');
+
+  const editMaterial = async () => {
+    const response = await axios.put(`material/${id}`, { name, stock });
+    if (response.status === 200) setMessage('Successfully changed data!');
+  };
+
+  useEffect(() => {
+    const getProductById = async () => {
+      const { data } = await axios.get(`/material/${id}`);
+      setName(data.name);
+      setStock(data.stock);
+    };
+
+    getProductById();
+  }, [id]);
 
   return (
     <div>
       <Header />
-
+      {message !== '' && <Message text={message} />}
       <h3 className="d-flex justify-content-center py-3">Edit raw material</h3>
 
       <div className="container">
@@ -29,7 +45,8 @@ function EditRawMaterial() {
                 placeholder="name"
                 name="name"
                 id="name"
-                onKeyUp={handleChange}
+                onChange={(e) => setName(e.target.value)}
+                value={name}
                 required
               />
             </label>
@@ -46,14 +63,15 @@ function EditRawMaterial() {
                 name="stock"
                 id="stock"
                 min={0}
-                onKeyUp={handleChange}
+                onChange={(e) => setStock(e.target.value)}
+                value={stock}
                 required
               />
             </label>
           </div>
 
           <div className="d-flex justify-content-around py-4">
-            <button type="button" className="btn btn-outline-success">
+            <button type="button" className="btn btn-outline-success" onClick={editMaterial}>
               Submit
             </button>
             <button type="button" className="btn btn-outline-danger" onClick={() => navigate('/raw-material')}>Cancel</button>

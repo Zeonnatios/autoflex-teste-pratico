@@ -13,6 +13,11 @@ function Products() {
   const [show, setShow] = useState(false);
   const [selectedId, setSelectedId] = useState('');
 
+  const getProducts = async () => {
+    const { data } = await axios.get('/product');
+    setProducts(data);
+  };
+
   const deleteProductById = async () => {
     await axios.delete(`/product/${selectedId}`);
   };
@@ -25,15 +30,12 @@ function Products() {
   const handleConfirmModal = async () => {
     await deleteProductById();
     handleCloseModal();
+    getProducts();
   };
 
   useEffect(() => {
-    const getProducts = async () => {
-      const { data } = await axios.get('/product');
-      setProducts(data);
-    };
     getProducts();
-  }, [products]);
+  }, []);
 
   return (
 

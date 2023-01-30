@@ -1,11 +1,41 @@
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import Header from '../components/Header';
+import axios from '../../services/axios';
 
 function RawMaterial() {
   const navigate = useNavigate();
+  const [materials, setMaterials] = useState([]);
+  const [show, setShow] = useState(false);
+  const [selectedId, setSelectedId] = useState('');
+
+  const getMaterials = async () => {
+    const { data } = await axios.get('/material');
+    setMaterials(data);
+  };
+
+  const deleteMaterial = async () => {
+    await axios.delete(`/material/${selectedId}`);
+  };
+
+  const handleCloseModal = () => setShow(false);
+  const handleShowModal = (id) => {
+    setShow(true);
+    setSelectedId(id);
+  };
+  const handleConfirmModal = async () => {
+    await deleteMaterial();
+    handleCloseModal();
+    getMaterials();
+  };
+
+  useEffect(() => {
+    getMaterials();
+  }, []);
 
   return (
     <div>
@@ -33,29 +63,48 @@ function RawMaterial() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>
-                <button type="button" className="btn btn-outline-warning" onClick={() => navigate('/edit-raw-material/45')}>
-                  <FontAwesomeIcon icon={faPencil} />
+            {materials && materials.map((material, index) => (
+              <tr key={material.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{material.name}</td>
+                <td>{material.stock}</td>
+                <td>
+                  <button type="button" className="btn btn-outline-warning" onClick={() => navigate(`/edit-raw-material/${material.id}`)}>
+                    <FontAwesomeIcon icon={faPencil} />
+                    {' '}
+                    Edit
+                  </button>
                   {' '}
-                  Edit
-                </button>
-                {' '}
-                /
-                {' '}
-                <button type="button" className="btn btn-outline-danger">
-                  <FontAwesomeIcon icon={faTrash} />
+                  /
                   {' '}
-                  Delete
-                </button>
-              </td>
-            </tr>
+                  <button type="button" className="btn btn-outline-danger" onClick={() => handleShowModal(material.id)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                    {' '}
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+      <Modal show={show} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure ?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you really want to delete this raw material ?
+          This process cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmModal}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

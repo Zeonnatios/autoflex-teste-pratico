@@ -12,7 +12,7 @@ function EditProduct() {
   const [message, setMessage] = useState('');
   const editProduct = async () => {
     const response = await axios.put(`product/${id}`, { name, value });
-    if (response.status === 200) await setMessage('Successfully changed data');
+    if (response.status === 200) setMessage('Successfully changed data!');
   };
 
   useEffect(() => {
