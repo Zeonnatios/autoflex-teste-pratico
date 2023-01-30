@@ -67,7 +67,7 @@ function Products() {
               <tr key={product.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{product.name}</td>
-                <td>{product.value}</td>
+                <td>{product.value.toFixed(2)}</td>
                 <td>
                   <button type="button" className="btn btn-outline-warning" onClick={() => navigate(`/edit-product/${product.id}`)}>
                     <FontAwesomeIcon icon={faPencil} />

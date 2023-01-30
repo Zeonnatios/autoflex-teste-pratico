@@ -13,7 +13,7 @@ function CreateRawMaterial() {
 
   const createNewMaterial = async () => {
     const response = await axios.post('material', { name, stock });
-    if (response.status === 200) {
+    if (response.status === 201) {
       setMessage('successfully registered product!');
       setName('');
       setStock(0);
