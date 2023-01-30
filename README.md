@@ -26,8 +26,8 @@ Neste projeto, fui responsável por criar uma aplicação full-stack utilizando 
 - [x] Editar produtos
 - [x] Excluir produtos
 - [x] Associar produtos a matérias primas
-- [] Associar quantidade de matéria prima necessária para criar um produto.
-- [] Consultar produtos a ser produzidos com base no estoque de matéria prima disponível.
+- [ ] Associar quantidade de matéria prima necessária para criar um produto.
+- [ ] Consultar produtos a ser produzidos com base no estoque de matéria prima disponível.
 
 ## 📋 Pré-requisitos
 
