@@ -1,6 +1,5 @@
 package com.projetada.factorymanagement.controllers;
 
-import com.projetada.factorymanagement.dtos.ProductDto;
 import com.projetada.factorymanagement.models.Product;
 import com.projetada.factorymanagement.services.ProductService;
 import jakarta.validation.Valid;
@@ -56,13 +55,11 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
-                                                @RequestBody @Valid ProductDto productDto) {
+                                                @RequestBody Product product) {
         Optional<Product> productOptional = productService.findById(id);
         if (productOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found !");
         }
-        Product product = new Product();
-        BeanUtils.copyProperties(productDto, product);
         product.setId(productOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(productService.save(product));
     }

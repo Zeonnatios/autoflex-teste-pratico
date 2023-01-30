@@ -1,10 +1,7 @@
 package com.projetada.factorymanagement.controllers;
 
-import com.projetada.factorymanagement.dtos.MaterialDto;
 import com.projetada.factorymanagement.models.Material;
 import com.projetada.factorymanagement.services.MaterialService;
-import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,13 +53,11 @@ public class MaterialController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateMaterial(@PathVariable(value = "id") UUID id,
-                                                 @RequestBody @Valid MaterialDto materialDto) {
+                                                 @RequestBody Material material) {
         Optional<Material> materialOptional = materialService.findById(id);
         if (materialOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material not found !");
-        }
-        Material material = new Material();
-        BeanUtils.copyProperties(materialDto, material);
+        };
         material.setId(materialOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(materialService.save(material));
     }
