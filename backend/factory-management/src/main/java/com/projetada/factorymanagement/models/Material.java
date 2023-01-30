@@ -1,8 +1,12 @@
 package com.projetada.factorymanagement.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +22,10 @@ public class Material implements Serializable {
     private String name;
     @Column(nullable = false)
     private Integer stock;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "materials")
+    private Set<Product> products = new HashSet<>();
 
     public UUID getId() {
         return id;
@@ -41,5 +49,13 @@ public class Material implements Serializable {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

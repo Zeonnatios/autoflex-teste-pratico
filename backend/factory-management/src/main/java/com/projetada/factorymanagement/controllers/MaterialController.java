@@ -23,12 +23,10 @@ public class MaterialController {
     MaterialService materialService;
 
     @PostMapping
-    public ResponseEntity<Object> saveMaterial(@RequestBody @Valid MaterialDto materialDto) {
-        if (materialService.existsByName(materialDto.getName())) {
+    public ResponseEntity<Object> saveMaterial(@RequestBody Material material) {
+        if (materialService.existsByName(material.getName())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Material already exists!");
         }
-        Material material = new Material();
-        BeanUtils.copyProperties(materialDto, material);
         return ResponseEntity.status(HttpStatus.CREATED).body(materialService.save(material));
     }
 

@@ -23,12 +23,10 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Object> saveProduct(@RequestBody @Valid ProductDto productDto) {
-        if (productService.existsByName(productDto.getName())) {
+    public ResponseEntity<Object> saveProduct(@RequestBody Product product) {
+        if (productService.existsByName(product.getName())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Product already exists!");
         }
-        Product product = new Product();
-        BeanUtils.copyProperties(productDto, product);
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 
