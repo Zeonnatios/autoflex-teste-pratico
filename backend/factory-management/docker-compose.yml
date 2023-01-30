@@ -1,0 +1,13 @@
+
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-database
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=factory_management
+    ports:
+      - "5432:5432"
