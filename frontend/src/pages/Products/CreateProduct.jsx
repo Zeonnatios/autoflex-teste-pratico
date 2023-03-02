@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
 import Message from '../components/Message';
 import axios from '../../services/axios';
-import { setStorage } from '../../helpers/Storage';
+import { setStorage, getStorage } from '../../helpers/Storage';
+import ModalProductMaterials from '../components/ModalProductMaterials';
+import TableProductMaterials from '../components/TableProductMaterials';
 
 function CreateProduct() {
   const navigate = useNavigate();
-  const [materials, setMaterials] = useState([]);
+  const [rawMaterials, setRawMaterials] = useState([]);
   const [name, setName] = useState('');
   const [value, setValue] = useState(0);
   const [message, setMessage] = useState('');
@@ -22,38 +23,46 @@ function CreateProduct() {
 
   const addToMaterialListToStorage = (material) => {
     if (!materialList.some((item) => item.id === material.id)) {
-      const newMaterial = { ...material, quantity: 0 };
+      const newMaterial = { ...material };
       setMaterialList([...materialList, newMaterial]);
       setStorage('materialsList', [...materialList, newMaterial]);
     }
   };
 
-  const updateQuantity = (material, quantity) => {
-    const updatedMaterialList = materialList.map((item) => {
-      const newItem = { ...item };
-      if (newItem.id === material.id) {
-        newItem.quantity = quantity;
-      }
-      return newItem;
-    });
-    setMaterialList(updatedMaterialList);
-    setStorage('materialsList', [updatedMaterialList]);
-    console.log(materialList);
+  const removeMaterialFromList = (material) => {
+    const newList = materialList.filter((item) => item.id !== material.id);
+    setMaterialList(newList);
+    setStorage('materialsList', newList);
   };
 
+  // const updateQuantity = (material, quantity) => {
+  //   const updatedMaterialList = materialList.map((item) => {
+  //     const newItem = { ...item };
+  //     if (newItem.id === material.id) {
+  //       newItem.quantity = quantity;
+  //     }
+  //     return newItem;
+  //   });
+  //   setMaterialList(updatedMaterialList);
+  //   setStorage('materialsList', [updatedMaterialList]);
+  // };
+
   const createNewProduct = async () => {
-    const response = await axios.post('product', { name, value });
+    const materials = getStorage('materialsList');
+    const response = await axios.post('product', { name, value, materials });
     if (response.status === 201) {
       setMessage('Successfully registered product!');
       setName('');
       setValue(0);
+      setStorage('materialsList', []);
+      setMaterialList([]);
     }
     // if (response.status === 409) setMessage('erro');
   };
 
   const getMaterials = async () => {
     const { data } = await axios.get('/material');
-    setMaterials(data);
+    setRawMaterials(data);
   };
 
   useEffect(() => {
@@ -63,6 +72,12 @@ function CreateProduct() {
   return (
     <div>
       <Header />
+      <ModalProductMaterials
+        show={show}
+        handleCloseModal={handleCloseModal}
+        addToMaterialListToStorage={addToMaterialListToStorage}
+        rawMaterials={rawMaterials}
+      />
       {message !== '' && <Message text={message} />}
       <h3 className="d-flex justify-content-center py-3">Register a new product</h3>
 
@@ -111,64 +126,11 @@ function CreateProduct() {
             </button>
           </div>
 
-          <Modal show={show} onHide={handleCloseModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Bind materials to the product</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {materials && materials.map((material, index) => (
-                    <tr key={material.id}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{material.name}</td>
-                      <td>{material.stock}</td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-outline-primary"
-                          onClick={() => addToMaterialListToStorage(material)}
-                        >
-                          <FontAwesomeIcon icon={faPlus} />
-                          {' '}
-                          Bind to
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </Modal.Body>
-          </Modal>
-
-          {materialList.length > 0 && <h4 className="d-flex justify-content-center py-1">Inform the quantities!</h4>}
-          {materialList.length > 0 && materialList.map((material) => (
-            <div key={material.id}>
-              <div className="form-inline">
-                <p>{material.name}</p>
-
-                <input
-                  className="form-control"
-                  placeholder="0"
-                  type="number"
-                  name={`${material.name}-value`}
-                  id={`${material.name}-value`}
-                  min={0}
-                  onChange={(e) => updateQuantity(material, e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-          ))}
+          <h4 className="d-flex justify-content-center py-1">Materials</h4>
+          <TableProductMaterials
+            materialList={materialList}
+            removeMaterialFromList={removeMaterialFromList}
+          />
 
           <div className="d-flex justify-content-around py-4">
             <button type="button" className="btn btn-outline-success" onClick={createNewProduct}>
@@ -180,10 +142,8 @@ function CreateProduct() {
               onClick={() => navigate('/products')}
             >
               Cancel
-
             </button>
           </div>
-
         </form>
       </div>
     </div>
