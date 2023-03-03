@@ -1,17 +1,23 @@
-package com.projetada.factorymanagement.dtos;
+package com.projetada.factorymanagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.projetada.factorymanagement.models.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MaterialDto {
 
-    @NotBlank
-    @Size(max = 100)
+
     private String name;
 
-    @NotNull
     private Integer stock;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Product> products;
 
     public String getName() {
         return name;
@@ -27,5 +33,13 @@ public class MaterialDto {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

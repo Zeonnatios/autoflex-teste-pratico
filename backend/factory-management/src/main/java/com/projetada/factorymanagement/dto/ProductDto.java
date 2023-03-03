@@ -1,4 +1,4 @@
-package com.projetada.factorymanagement.dtos;
+package com.projetada.factorymanagement.dto;
 
 import com.projetada.factorymanagement.models.Material;
 import jakarta.validation.constraints.NotBlank;
@@ -10,14 +10,11 @@ import java.util.Set;
 
 public class ProductDto {
 
-    @NotBlank
-    @Size(max = 100)
     private String name;
 
-    @NotNull
     private Double value;
 
-    private List<Material> materials;
+    private Set<Material> materials;
 
     public String getName() {
         return name;
@@ -35,11 +32,11 @@ public class ProductDto {
         this.value = value;
     }
 
-    public List<Material> getMaterials() {
+    public Set<Material> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(List<Material> materials) {
+    public void setMaterials(Set<Material> materials) {
         this.materials = materials;
     }
 }
