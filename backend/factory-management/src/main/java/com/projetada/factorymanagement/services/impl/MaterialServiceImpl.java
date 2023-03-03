@@ -26,7 +26,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public Material findById(UUID id) {
         Optional<Material> materialOptional = materialRepository.findById(id);
-        return materialOptional.orElseThrow(() -> new ObjectNotFoundException("User Not Found"));
+        return materialOptional.orElseThrow(() -> new ObjectNotFoundException("Material Not Found"));
     }
 
     @Override
@@ -36,7 +36,6 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public Material create(MaterialDto materialDto) {
-        System.out.println(materialDto.getId());
         findByName(materialDto);
         return materialRepository.save(modelMapper.map(materialDto, Material.class));
     }

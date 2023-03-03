@@ -56,7 +56,7 @@ public class MaterialController {
 
     @PutMapping(ID)
     public ResponseEntity<MaterialDto> update(@PathVariable(value = "id") UUID id,
-                                                 @RequestBody MaterialDto materialDto) {
+                                              @RequestBody MaterialDto materialDto) {
         materialDto.setId(id);
         return ResponseEntity.ok().body(modelMapper.map(materialService.update(materialDto), MaterialDto.class));
     }
