@@ -7,14 +7,25 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class ProductDto {
+
+    private UUID id;
 
     private String name;
 
     private Double value;
 
     private Set<Material> materials;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
