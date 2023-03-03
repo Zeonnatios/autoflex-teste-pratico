@@ -1,40 +1,21 @@
 package com.projetada.factorymanagement.services;
 
+import com.projetada.factorymanagement.dto.MaterialDto;
 import com.projetada.factorymanagement.models.Material;
-import com.projetada.factorymanagement.repositories.MaterialRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
-public class MaterialService {
+public interface MaterialService {
 
-    @Autowired
-    MaterialRepository materialRepository;
+    Material findById(UUID id);
 
-    @Transactional
-    public Material save(Material material) {
-        return materialRepository.save(material);
-    }
+    List<Material> findAll();
 
-    public boolean existsByName(String name) {
-        return materialRepository.existsByName(name);
-    }
+    Material create(MaterialDto materialDto);
 
-    public List<Material> findAll() {
-        return materialRepository.findAll();
-    }
+    Material update(MaterialDto materialDto);
 
-    public Optional<Material> findById(UUID id) {
-        return materialRepository.findById(id);
-    }
-
-    @Transactional
-    public void delete(Material material) {
-        materialRepository.delete(material);
-    }
+    void delete(UUID id);
 }

@@ -1,12 +1,16 @@
 package com.projetada.factorymanagement.controllers;
 
+import com.projetada.factorymanagement.dto.MaterialDto;
 import com.projetada.factorymanagement.models.Material;
 import com.projetada.factorymanagement.services.MaterialService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,50 +20,45 @@ import java.util.UUID;
 @RequestMapping("/material")
 public class MaterialController {
 
+    private static final String ID = "/{id}";
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Autowired
     MaterialService materialService;
 
     @PostMapping
-    public ResponseEntity<Object> saveMaterial(@RequestBody Material material) {
-        if (materialService.existsByName(material.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Material already exists!");
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(materialService.save(material));
+    public ResponseEntity<MaterialDto> create(@RequestBody MaterialDto materialDto) {
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest().path(ID)
+                .buildAndExpand(materialService.create(materialDto).getId())
+                .toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Material>> getAllMaterials() {
-        return ResponseEntity.status(HttpStatus.OK).body(materialService.findAll());
+    public ResponseEntity<List<MaterialDto>> findAll() {
+        return ResponseEntity.ok().body(
+                materialService.findAll().stream().map(x -> modelMapper.map(x, MaterialDto.class)).toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneMaterial(@PathVariable(value = "id") UUID id) {
-        Optional<Material> materialOptional = materialService.findById(id);
-        if (materialOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material not found !");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(materialOptional.get());
+    @GetMapping(value = ID)
+    public ResponseEntity<MaterialDto> findById(@PathVariable(value = "id") UUID id) {
+        return ResponseEntity.ok().body(modelMapper.map(materialService.findById(id), MaterialDto.class));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteMaterial(@PathVariable(value = "id") UUID id) {
-        Optional<Material> materialOptional = materialService.findById(id);
-        if (materialOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material not found !");
-        }
-        materialService.delete(materialOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Material deleted successfully !");
+    @DeleteMapping(ID)
+    public ResponseEntity<MaterialDto> delete(@PathVariable(value = "id") UUID id) {
+        materialService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateMaterial(@PathVariable(value = "id") UUID id,
-                                                 @RequestBody Material material) {
-        Optional<Material> materialOptional = materialService.findById(id);
-        if (materialOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material not found !");
-        };
-        material.setId(materialOptional.get().getId());
-        return ResponseEntity.status(HttpStatus.OK).body(materialService.save(material));
+    @PutMapping(ID)
+    public ResponseEntity<MaterialDto> update(@PathVariable(value = "id") UUID id,
+                                                 @RequestBody MaterialDto materialDto) {
+        materialDto.setId(id);
+        return ResponseEntity.ok().body(modelMapper.map(materialService.update(materialDto), MaterialDto.class));
     }
 
 }
