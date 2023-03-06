@@ -23,6 +23,7 @@ public class ProductDto {
 
     private Set<Material> materials;
 
+
     public UUID getId() {
         return id;
     }

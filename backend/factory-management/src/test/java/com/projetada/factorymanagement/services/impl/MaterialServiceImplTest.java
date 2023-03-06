@@ -123,6 +123,7 @@ class MaterialServiceImplTest extends ContainersEnvironment {
 
     @Test
     void whenUpdateThenReturnSuccess() {
+        when(materialRepository.findById(any())).thenReturn(optionalMaterial);
         when(materialRepository.save(any())).thenReturn(material);
 
         Material response = materialService.update(materialDto);

@@ -11,9 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "TB_MATERIAL")
 public class Material implements Serializable {
@@ -31,6 +28,16 @@ public class Material implements Serializable {
     @JsonIgnore
     @ManyToMany(mappedBy = "materials")
     private Set<Product> products = new HashSet<>();
+
+    public Material() {
+    }
+
+    public Material(UUID id, String name, Integer stock, Set<Product> products) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.products = products;
+    }
 
     public UUID getId() {
         return id;
