@@ -1,32 +1,39 @@
 package com.projetada.factorymanagement.services.impl;
 
 
+import com.projetada.factorymanagement.FactoryManagementApplication;
+import com.projetada.factorymanagement.config.ContainersEnvironment;
 import com.projetada.factorymanagement.dto.MaterialDto;
+import com.projetada.factorymanagement.exceptions.DataIntegrityViolationException;
+import com.projetada.factorymanagement.exceptions.ObjectNotFoundException;
 import com.projetada.factorymanagement.models.Material;
 import com.projetada.factorymanagement.models.Product;
 import com.projetada.factorymanagement.repositories.MaterialRepository;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @ActiveProfiles("test")
-class MaterialServiceImplTest {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = FactoryManagementApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class MaterialServiceImplTest extends ContainersEnvironment {
 
     public static final UUID ID = UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607");
-    public static final String NAME = "Glass";
+    public static final String NAME = "Plastic";
     public static final Integer STOCK = 20;
     public static final Set<Product> PRODUCTS = new HashSet<>();
     public static final int INDEX = 0;
-    public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
-    public static final String USER_NOT_FOUND = "User Not Found";
+    public static final String MATERIAL_ALREADY_EXISTS = "Material already exists";
+    public static final String MATERIAL_NOT_FOUND = "Material Not Found";
 
     @InjectMocks
     private MaterialServiceImpl materialService;
@@ -44,6 +51,7 @@ class MaterialServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        startUsersMock();
     }
 
     private void startUsersMock() {
@@ -54,7 +62,7 @@ class MaterialServiceImplTest {
 
     @Test
     public void WhenFindByIdThenReturnSuccessResponse() {
-        when(materialRepository.findById(any(UUID.class))).thenReturn(optionalMaterial);
+        when(materialRepository.findById(any())).thenReturn(optionalMaterial);
 
         Material response = materialService.findById(ID);
 
@@ -63,6 +71,16 @@ class MaterialServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(STOCK, response.getStock());
+    }
+
+    @Test
+    public void WhenFindByIdThenReturnObjectNotFoundException() {
+        when(materialRepository.findById(any())).thenThrow(new ObjectNotFoundException(MATERIAL_NOT_FOUND));
+
+        assertThrows(ObjectNotFoundException.class, () -> materialService.findById(ID));
+        ObjectNotFoundException objectNotFoundException = assertThrows(ObjectNotFoundException.class,
+                () -> materialService.findById(ID));
+        assertEquals(MATERIAL_NOT_FOUND, objectNotFoundException.getMessage());
     }
 
     @Test
@@ -80,14 +98,71 @@ class MaterialServiceImplTest {
     }
 
     @Test
-    public void create() {
+    public void WhenCreateThenReturnSuccess() {
+        when(materialRepository.save(any())).thenReturn(material);
+
+        Material response = materialService.create(materialDto);
+
+        assertNotNull(response);
+        assertEquals(Material.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(STOCK, response.getStock());
     }
 
     @Test
-    public void update() {
+    public void WhenCreateThenReturnADataIntegrityViolationException() {
+        when(materialRepository.save(any())).thenThrow(new DataIntegrityViolationException(MATERIAL_ALREADY_EXISTS));
+
+        assertThrows(DataIntegrityViolationException.class, () -> materialService.create(materialDto));
+        DataIntegrityViolationException dataIntegrityViolationException = assertThrows(DataIntegrityViolationException.class,
+                () -> materialService.create(materialDto));
+        assertEquals(MATERIAL_ALREADY_EXISTS, dataIntegrityViolationException.getMessage());
+
     }
 
     @Test
-    public void delete() {
+    void whenUpdateThenReturnSuccess() {
+        when(materialRepository.save(any())).thenReturn(material);
+
+        Material response = materialService.update(materialDto);
+
+        assertNotNull(response);
+        assertEquals(Material.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(STOCK, response.getStock());
+    }
+
+    @Test
+    void whenUpdateThenReturnADataIntegrityViolationException() {
+        when(materialRepository.findByName(anyString())).thenReturn(optionalMaterial);
+
+        try {
+            optionalMaterial.get().setId(UUID.fromString("f6499957-37f6-4277-9d44-c6a114512345"));
+            materialService.create(materialDto);
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(MATERIAL_ALREADY_EXISTS, ex.getMessage());
+        }
+    }
+
+    @Test
+    void deleteWithSuccess() {
+        when(materialRepository.findById(any())).thenReturn(optionalMaterial);
+        doNothing().when(materialRepository).deleteById(any());
+        materialService.delete(ID);
+        verify(materialRepository, times(1)).deleteById(any());
+    }
+
+    @Test
+    void whenDeleteThenReturnObjectNotFoundException() {
+        when(materialRepository.findById(any())).thenThrow(new ObjectNotFoundException(MATERIAL_NOT_FOUND));
+        try {
+            materialService.delete(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(MATERIAL_NOT_FOUND, ex.getMessage());
+        }
     }
 }
