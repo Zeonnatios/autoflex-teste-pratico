@@ -1,8 +1,6 @@
 package com.projedata.factorymanagement.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,7 +22,7 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Double value;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Recipe> recipes = new HashSet<>();
 
     public Product() {

@@ -1,21 +1,11 @@
 package com.projedata.factorymanagement.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.projedata.factorymanagement.models.Material;
 import com.projedata.factorymanagement.models.Recipe;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProductDto {
 
     private UUID id;
@@ -24,9 +14,23 @@ public class ProductDto {
 
     private Double value;
 
-    @JsonIgnore
-    private Set<Recipe> recipes = new HashSet<>();
+    private Set<Recipe> recipes;
 
+    public ProductDto() {
+    }
+
+    public ProductDto(UUID id, String name, Double value) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+    }
+
+    public ProductDto(UUID id, String name, Double value, Set<Recipe> recipes) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.recipes = recipes;
+    }
 
     public UUID getId() {
         return id;

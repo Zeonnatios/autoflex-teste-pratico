@@ -22,7 +22,7 @@ public class Material implements Serializable {
     @Column(nullable = false)
     private Integer stock;
 
-    @OneToMany(mappedBy = "material")
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
 
     public Material() {
