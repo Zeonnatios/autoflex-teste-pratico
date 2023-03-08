@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(UUID id) {
         Optional<Product> productOptional = productRepository.findById(id);
-        return productOptional.orElseThrow(() -> new ObjectNotFoundException("User Not Found"));
+        return productOptional.orElseThrow(() -> new ObjectNotFoundException("Product Not Found"));
     }
 
     @Override

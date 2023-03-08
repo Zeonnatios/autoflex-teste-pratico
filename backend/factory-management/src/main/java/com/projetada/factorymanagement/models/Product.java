@@ -33,6 +33,16 @@ public class Product implements Serializable {
     )
     private Set<Material> materials = new HashSet<>();
 
+    public Product() {
+    }
+
+    public Product(UUID id, String name, Double value, Set<Material> materials) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.materials = materials;
+    }
+
     public UUID getId() {
         return id;
     }

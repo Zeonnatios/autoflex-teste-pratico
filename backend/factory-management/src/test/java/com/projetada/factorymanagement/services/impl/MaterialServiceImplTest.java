@@ -111,7 +111,7 @@ class MaterialServiceImplTest extends ContainersEnvironment {
     }
 
     @Test
-    public void WhenCreateThenReturnADataIntegrityViolationException() {
+    public void WhenCreateThenReturnADataIntegrityViolationExceptionMaterialAlreadyExists() {
         when(materialRepository.save(any())).thenThrow(new DataIntegrityViolationException(MATERIAL_ALREADY_EXISTS));
 
         assertThrows(DataIntegrityViolationException.class, () -> materialService.create(materialDto));
@@ -136,7 +136,7 @@ class MaterialServiceImplTest extends ContainersEnvironment {
     }
 
     @Test
-    void whenUpdateThenReturnADataIntegrityViolationException() {
+    void whenUpdateThenReturnADataIntegrityViolationExceptionMaterialAlreadyExists() {
         when(materialRepository.findByName(anyString())).thenReturn(optionalMaterial);
 
         try {
