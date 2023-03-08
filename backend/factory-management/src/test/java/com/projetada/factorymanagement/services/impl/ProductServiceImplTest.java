@@ -1,5 +1,7 @@
 package com.projetada.factorymanagement.services.impl;
 
+import com.projetada.factorymanagement.FactoryManagementApplication;
+import com.projetada.factorymanagement.config.ContainersEnvironment;
 import com.projetada.factorymanagement.dto.ProductDto;
 import com.projetada.factorymanagement.exceptions.DataIntegrityViolationException;
 import com.projetada.factorymanagement.exceptions.ObjectNotFoundException;
@@ -8,10 +10,14 @@ import com.projetada.factorymanagement.models.Product;
 import com.projetada.factorymanagement.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
@@ -20,7 +26,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class ProductServiceImplTest {
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = FactoryManagementApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class ProductServiceImplTest extends ContainersEnvironment {
 
     public static final UUID ID = UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607");
     public static final String NAME = "Machine";
@@ -33,7 +42,7 @@ class ProductServiceImplTest {
 
     @InjectMocks
     private ProductServiceImpl productService;
-    
+
     @Mock
     private ProductRepository productRepository;
 
@@ -45,6 +54,7 @@ class ProductServiceImplTest {
     private Optional<Product> productOptional;
 
     private void startUsersMock() {
+        MATERIALS.add(new Material(UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607"), "Plastic", 24, new HashSet<>()));
         product = new Product(ID, NAME, VALUE, MATERIALS);
         productDto = new ProductDto(ID, NAME, VALUE, MATERIALS);
         productOptional = Optional.of(new Product(ID, NAME, VALUE, MATERIALS));
