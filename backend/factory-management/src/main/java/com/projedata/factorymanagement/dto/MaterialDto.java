@@ -3,6 +3,7 @@ package com.projedata.factorymanagement.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.projedata.factorymanagement.models.Product;
+import com.projedata.factorymanagement.models.Recipe;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,13 @@ public class MaterialDto {
     private Integer stock;
 
     @JsonIgnore
-    private Set<Product> products;
+    private Set<Recipe> recipes;
+
+    public MaterialDto(UUID id, String name, Integer stock) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+    }
 
     public UUID getId() {
         return id;
@@ -50,12 +57,11 @@ public class MaterialDto {
         this.stock = stock;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public Set<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
-
 }

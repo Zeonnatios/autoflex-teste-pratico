@@ -5,6 +5,7 @@ import com.projedata.factorymanagement.config.ContainersEnvironment;
 import com.projedata.factorymanagement.dto.MaterialDto;
 import com.projedata.factorymanagement.models.Material;
 import com.projedata.factorymanagement.models.Product;
+import com.projedata.factorymanagement.models.Recipe;
 import com.projedata.factorymanagement.services.MaterialService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class MaterialControllerTest extends ContainersEnvironment {
     public static final UUID ID = UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607");
     public static final String NAME = "Plastic";
     public static final Integer STOCK = 20;
-    public static final Set<Product> PRODUCTS = new HashSet<>();
+    public static final Set<Recipe> RECIPES = new HashSet<>();
     public static final int INDEX = 0;
     public static final String MATERIAL_ALREADY_EXISTS = "Material already exists";
     public static final String MATERIAL_NOT_FOUND = "Material Not Found";
@@ -66,9 +67,9 @@ class MaterialControllerTest extends ContainersEnvironment {
     }
 
     private void startUsersMock() {
-        material = new Material(ID, NAME, STOCK, PRODUCTS);
-        materialDto = new MaterialDto(ID, NAME, STOCK, PRODUCTS);
-        optionalMaterial = Optional.of(new Material(ID, NAME, STOCK, PRODUCTS));
+        material = new Material(ID, NAME, STOCK, RECIPES);
+        materialDto = new MaterialDto(ID, NAME, STOCK, RECIPES);
+        optionalMaterial = Optional.of(new Material(ID, NAME, STOCK, RECIPES));
     }
 
     @Test

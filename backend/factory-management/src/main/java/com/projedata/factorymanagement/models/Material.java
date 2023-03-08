@@ -22,18 +22,23 @@ public class Material implements Serializable {
     @Column(nullable = false)
     private Integer stock;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "materials")
-    private Set<Product> products = new HashSet<>();
+    @OneToMany(mappedBy = "material")
+    private Set<Recipe> recipes;
 
     public Material() {
     }
 
-    public Material(UUID id, String name, Integer stock, Set<Product> products) {
+    public Material(UUID id, String name, Integer stock) {
         this.id = id;
         this.name = name;
         this.stock = stock;
-        this.products = products;
+    }
+
+    public Material(UUID id, String name, Integer stock, Set<Recipe> recipes) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.recipes = recipes;
     }
 
     public UUID getId() {
@@ -60,12 +65,12 @@ public class Material implements Serializable {
         this.stock = stock;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public Set<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
 }
 

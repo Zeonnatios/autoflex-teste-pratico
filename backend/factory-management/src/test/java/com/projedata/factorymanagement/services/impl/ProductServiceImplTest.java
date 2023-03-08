@@ -6,6 +6,7 @@ import com.projedata.factorymanagement.exceptions.DataIntegrityViolationExceptio
 import com.projedata.factorymanagement.exceptions.ObjectNotFoundException;
 import com.projedata.factorymanagement.models.Material;
 import com.projedata.factorymanagement.models.Product;
+import com.projedata.factorymanagement.models.Recipe;
 import com.projedata.factorymanagement.repositories.ProductRepository;
 import com.projedata.factorymanagement.config.ContainersEnvironment;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ class ProductServiceImplTest extends ContainersEnvironment {
     public static final UUID ID = UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607");
     public static final String NAME = "Machine";
     public static final Double VALUE = 24.99;
-    public static final Set<Material> MATERIALS = new HashSet<>();
+    public static final Set<Recipe> RECIPES = new HashSet<>();
     public static final int INDEX = 0;
     public static final String PRODUCT_ALREADY_EXISTS = "Product already exists";
     public static final String PRODUCT_NOT_FOUND = "Product Not Found";
@@ -54,10 +55,9 @@ class ProductServiceImplTest extends ContainersEnvironment {
     private Optional<Product> productOptional;
 
     private void startUsersMock() {
-        MATERIALS.add(new Material(UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607"), "Plastic", 24, new HashSet<>()));
-        product = new Product(ID, NAME, VALUE, MATERIALS);
-        productDto = new ProductDto(ID, NAME, VALUE, MATERIALS);
-        productOptional = Optional.of(new Product(ID, NAME, VALUE, MATERIALS));
+        product = new Product(ID, NAME, VALUE, RECIPES);
+        productDto = new ProductDto(ID, NAME, VALUE, RECIPES);
+        productOptional = Optional.of(new Product(ID, NAME, VALUE));
     }
 
     @BeforeEach

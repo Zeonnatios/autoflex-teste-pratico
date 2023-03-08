@@ -24,22 +24,25 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Double value;
 
-    @ManyToMany
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
-    @JoinTable(name = "TB_RECIPE",
-            joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "material_id", referencedColumnName = "id")}
-    )
-    private Set<Material> materials = new HashSet<>();
+    @OneToMany(mappedBy = "product")
+    private Set<Recipe> recipes = new HashSet<>();
 
     public Product() {
     }
 
-    public Product(UUID id, String name, Double value, Set<Material> materials) {
+
+    public Product(UUID id, String name, Double value) {
         this.id = id;
         this.name = name;
         this.value = value;
-        this.materials = materials;
+        this.recipes = new HashSet<>();
+    }
+
+    public Product(UUID id, String name, Double value, Set<Recipe> recipes) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.recipes = recipes;
     }
 
     public UUID getId() {
@@ -66,12 +69,11 @@ public class Product implements Serializable {
         this.value = value;
     }
 
-    public Set<Material> getMaterials() {
-        return materials;
+    public Set<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setMaterials(Set<Material> materials) {
-        this.materials = materials;
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
-
 }
