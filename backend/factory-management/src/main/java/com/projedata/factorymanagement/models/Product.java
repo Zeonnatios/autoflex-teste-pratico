@@ -1,6 +1,8 @@
 package com.projedata.factorymanagement.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -23,10 +25,10 @@ public class Product implements Serializable {
     private Double value;
 
     @ManyToMany
-    @JoinTable(
-            name = "TB_RECIPE",
-            joinColumns = {@JoinColumn(name = "id_product", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "id_material", referencedColumnName = "id")}
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
+    @JoinTable(name = "TB_RECIPE",
+            joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "material_id", referencedColumnName = "id")}
     )
     private Set<Material> materials = new HashSet<>();
 
