@@ -26,7 +26,7 @@ Neste projeto, fui responsável por criar uma aplicação full-stack utilizando 
 - [x] Editar produtos
 - [x] Excluir produtos
 - [x] Associar produtos a matérias primas
-- [ ] Associar quantidade de matéria prima necessária para criar um produto.
+- [x] Associar quantidade de matéria prima necessária para criar um produto.
 - [ ] Consultar produtos a ser produzidos com base no estoque de matéria prima disponível.
 
 ## 📋 Pré-requisitos
@@ -89,6 +89,4 @@ yarn start
 * Implementar a consulta de produtos a ser produzidos com base no estoque de matéria prima disponível.
 * Implementar o redux no frontend, para lidar com requisições e persistência de dados.
 * Implementar uma documentação com swagger no backend.
-* Implementar testes unitários no backend com JUnit.
 * Implementar testes unitários no frontend com Jest e a biblioteca RTL, ou Cypress.
-
