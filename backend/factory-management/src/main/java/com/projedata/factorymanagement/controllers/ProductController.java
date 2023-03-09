@@ -1,5 +1,6 @@
 package com.projedata.factorymanagement.controllers;
 
+import com.projedata.factorymanagement.models.Product;
 import com.projedata.factorymanagement.services.ProductService;
 import com.projedata.factorymanagement.dto.ProductDto;
 import org.modelmapper.ModelMapper;
@@ -27,11 +28,12 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDto> create(@RequestBody ProductDto productDto) {
+        Product product = productService.create(productDto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID)
-                .buildAndExpand(productService.create(productDto).getId())
+                .buildAndExpand(product.getId())
                 .toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(modelMapper.map(product, ProductDto.class));
     }
 
     @GetMapping
