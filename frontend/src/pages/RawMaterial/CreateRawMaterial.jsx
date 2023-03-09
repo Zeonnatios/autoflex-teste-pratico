@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../services/axios';
 import Header from '../components/Header';
 import Message from '../components/Message';
 
@@ -12,11 +11,27 @@ function CreateRawMaterial() {
   const [message, setMessage] = useState('');
 
   const createNewMaterial = async () => {
-    const response = await axios.post('material', { name, stock });
+    const newRawMaterial = {
+      name,
+      stock: parseInt(stock, 10),
+    };
+    const request = await fetch('http://localhost:8080/material', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRawMaterial),
+    });
+
+    const response = await request.json();
     if (response.status === 201) {
-      setMessage('successfully registered product!');
+      setMessage('Successfully registered material!');
       setName('');
       setStock(0);
+    }
+
+    if (response.status === 400) {
+      setName('');
+      setStock(0);
+      setMessage(`${response.error}`);
     }
   };
 
