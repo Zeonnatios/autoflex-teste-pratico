@@ -17,9 +17,20 @@ function CreateProduct() {
   const [message, setMessage] = useState('');
   const [show, setShow] = useState(false);
   const [materialList, setMaterialList] = useState([]);
+  const [, setRecipeList] = useState([]);
 
   const handleCloseModal = () => setShow(false);
   const handleShowModal = () => setShow(true);
+
+  const createRecipe = (productId) => {
+    const data = materialList.map((item) => ({
+      product: { id: productId },
+      material: { id: item.id },
+      quantity: parseInt(item.quantity, 10),
+    }));
+    setRecipeList(data);
+    setStorage('recipeList', data);
+  };
 
   const addToMaterialListToStorage = (material) => {
     if (!materialList.some((item) => item.id === material.id)) {
@@ -35,29 +46,36 @@ function CreateProduct() {
     setStorage('materialsList', newList);
   };
 
-  // const updateQuantity = (material, quantity) => {
-  //   const updatedMaterialList = materialList.map((item) => {
-  //     const newItem = { ...item };
-  //     if (newItem.id === material.id) {
-  //       newItem.quantity = quantity;
-  //     }
-  //     return newItem;
-  //   });
-  //   setMaterialList(updatedMaterialList);
-  //   setStorage('materialsList', [updatedMaterialList]);
-  // };
+  const updateQuantity = (material, quantity) => {
+    const updatedMaterialList = materialList.map((item) => {
+      const newItem = { ...item };
+      if (newItem.id === material.id) {
+        newItem.quantity = quantity;
+      }
+      return newItem;
+    });
+    setMaterialList(updatedMaterialList);
+    setStorage('materialsList', [updatedMaterialList]);
+  };
 
   const createNewProduct = async () => {
-    const materials = getStorage('materialsList');
-    const response = await axios.post('product', { name, value, materials });
+    const response = await axios.post('product', { name, value });
     if (response.status === 201) {
       setMessage('Successfully registered product!');
-      setName('');
-      setValue(0);
-      setStorage('materialsList', []);
-      setMaterialList([]);
     }
-    // if (response.status === 409) setMessage('erro');
+    const productId = response.data.id;
+    createRecipe(productId);
+
+    const recipes = getStorage('recipeList');
+    recipes.forEach(async (item) => {
+      await axios.post('recipe', item);
+    });
+
+    setName('');
+    setValue(0);
+    setStorage('materialsList', []);
+    setMaterialList([]);
+    setStorage('recipeList', []);
   };
 
   const getMaterials = async () => {
@@ -130,6 +148,7 @@ function CreateProduct() {
           <TableProductMaterials
             materialList={materialList}
             removeMaterialFromList={removeMaterialFromList}
+            updateQuantity={updateQuantity}
           />
 
           <div className="d-flex justify-content-around py-4">

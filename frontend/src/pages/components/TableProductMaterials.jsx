@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function TableProductMaterials({ materialList, removeMaterialFromList }) {
+function TableProductMaterials({ materialList, removeMaterialFromList, updateQuantity }) {
   return (
     <table className="table table-hover">
       <thead>
@@ -27,7 +27,7 @@ function TableProductMaterials({ materialList, removeMaterialFromList }) {
                 name={`${material.name}-value`}
                 id={`${material.name}-value`}
                 min={0}
-                //  onChange={(e) => updateQuantity(material, e.target.value)}
+                onChange={(e) => updateQuantity(material, e.target.value)}
                 required
               />
             </td>
@@ -50,6 +50,7 @@ function TableProductMaterials({ materialList, removeMaterialFromList }) {
 
 TableProductMaterials.propTypes = {
   removeMaterialFromList: PropTypes.func.isRequired,
+  updateQuantity: PropTypes.func.isRequired,
   materialList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

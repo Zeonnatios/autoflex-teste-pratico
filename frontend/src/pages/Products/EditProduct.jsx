@@ -30,6 +30,18 @@ function EditProduct() {
     }
   };
 
+  const updateQuantity = (material, quantity) => {
+    const updatedMaterialList = materialList.map((item) => {
+      const newItem = { ...item };
+      if (newItem.id === material.id) {
+        newItem.quantity = quantity;
+      }
+      return newItem;
+    });
+    setMaterialList(updatedMaterialList);
+    setStorage('materialsList', [updatedMaterialList]);
+  };
+
   const removeMaterialFromList = (material) => {
     const newList = materialList.filter((item) => item.id !== material.id);
     setMaterialList(newList);
@@ -124,6 +136,7 @@ function EditProduct() {
           <TableProductMaterials
             materialList={materialList}
             removeMaterialFromList={removeMaterialFromList}
+            updateQuantity={updateQuantity}
           />
 
           <div className="d-flex justify-content-around py-4">
