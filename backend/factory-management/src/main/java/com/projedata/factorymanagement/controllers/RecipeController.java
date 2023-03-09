@@ -31,7 +31,7 @@ public class RecipeController {
     RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<ProductDto> create(@RequestBody RecipeDto recipeDto) {
+    public ResponseEntity<RecipeDto> create(@RequestBody RecipeDto recipeDto) {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID)
                 .buildAndExpand(recipeService.create(recipeDto).getId())
