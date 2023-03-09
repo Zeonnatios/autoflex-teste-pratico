@@ -1,6 +1,7 @@
 package com.projedata.factorymanagement.controllers;
 
 import com.projedata.factorymanagement.dto.ProductDto;
+import com.projedata.factorymanagement.dto.RecipeDto;
 import com.projedata.factorymanagement.models.Recipe;
 import com.projedata.factorymanagement.services.ProductService;
 import com.projedata.factorymanagement.services.RecipeService;
@@ -30,23 +31,31 @@ public class RecipeController {
     RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<ProductDto> create(@RequestBody Recipe recipe) {
+    public ResponseEntity<ProductDto> create(@RequestBody RecipeDto recipeDto) {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID)
-                .buildAndExpand(recipeService.create(recipe).getId())
+                .buildAndExpand(recipeService.create(recipeDto).getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Recipe>> findAll() {
+    public ResponseEntity<List<RecipeDto>> findAll() {
 
-        return ResponseEntity.ok().body(recipeService.findAll());
+        return ResponseEntity.ok().body(
+                recipeService.findAll().stream().map(x -> modelMapper.map(x, RecipeDto.class)).toList());
     }
 
     @GetMapping(value = ID)
-    public ResponseEntity<Optional<Recipe>> findById(@PathVariable(value = "id") UUID id) {
-        return ResponseEntity.ok().body(recipeService.findById(id));
+    public ResponseEntity<RecipeDto> findById(@PathVariable(value = "id") UUID id) {
+        return ResponseEntity.ok().body(modelMapper.map(recipeService.findById(id), RecipeDto.class));
+    }
+
+    @PutMapping(value = ID)
+    public ResponseEntity<RecipeDto> update(@PathVariable(value = "id") UUID id,
+                                            @RequestBody RecipeDto recipeDto) {
+        recipeDto.setId(id);
+        return ResponseEntity.ok().body(modelMapper.map(recipeService.update(recipeDto), RecipeDto.class));
     }
 
 }

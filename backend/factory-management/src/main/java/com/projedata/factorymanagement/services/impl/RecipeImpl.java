@@ -1,7 +1,7 @@
 package com.projedata.factorymanagement.services.impl;
 
+import com.projedata.factorymanagement.dto.RecipeDto;
 import com.projedata.factorymanagement.exceptions.ObjectNotFoundException;
-import com.projedata.factorymanagement.models.Product;
 import com.projedata.factorymanagement.models.Recipe;
 import com.projedata.factorymanagement.repositories.RecipeRepository;
 import com.projedata.factorymanagement.services.RecipeService;
@@ -23,18 +23,24 @@ public class RecipeImpl implements RecipeService {
     private ModelMapper modelMapper;
 
     @Override
-    public Recipe create(Recipe recipe) {
-        return recipeRepository.save(recipe);
+    public Recipe create(RecipeDto recipeDto) {
+        return recipeRepository.save(modelMapper.map(recipeDto, Recipe.class));
     }
 
     @Override
-    public Optional<Recipe> findById(UUID id) {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-        return Optional.ofNullable(recipeOptional.orElseThrow(() -> new ObjectNotFoundException("Product Not Found")));
+    public Recipe findById(UUID id) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+        return optionalRecipe.orElseThrow(() -> new ObjectNotFoundException("Recipe Not Found"));
     }
 
     @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Recipe update(RecipeDto recipeDto) {
+
+        return recipeRepository.save(modelMapper.map(recipeDto, Recipe.class));
     }
 }

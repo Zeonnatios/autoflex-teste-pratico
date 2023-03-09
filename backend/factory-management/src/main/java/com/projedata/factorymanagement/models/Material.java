@@ -1,13 +1,14 @@
 package com.projedata.factorymanagement.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "TB_MATERIAL")
 public class Material implements Serializable {
@@ -22,55 +23,5 @@ public class Material implements Serializable {
     @Column(nullable = false)
     private Integer stock;
 
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
-    private Set<Recipe> recipes;
-
-    public Material() {
-    }
-
-    public Material(UUID id, String name, Integer stock) {
-        this.id = id;
-        this.name = name;
-        this.stock = stock;
-    }
-
-    public Material(UUID id, String name, Integer stock, Set<Recipe> recipes) {
-        this.id = id;
-        this.name = name;
-        this.stock = stock;
-        this.recipes = recipes;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Set<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = recipes;
-    }
 }
 

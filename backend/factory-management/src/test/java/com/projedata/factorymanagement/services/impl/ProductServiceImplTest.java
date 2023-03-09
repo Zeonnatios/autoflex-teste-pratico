@@ -35,7 +35,6 @@ class ProductServiceImplTest extends ContainersEnvironment {
     public static final UUID ID = UUID.fromString("f6499957-37f6-4277-9d44-c6a114531607");
     public static final String NAME = "Machine";
     public static final Double VALUE = 24.99;
-    public static final Set<Recipe> RECIPES = new HashSet<>();
     public static final int INDEX = 0;
     public static final String PRODUCT_ALREADY_EXISTS = "Product already exists";
     public static final String PRODUCT_NOT_FOUND = "Product Not Found";
@@ -55,8 +54,8 @@ class ProductServiceImplTest extends ContainersEnvironment {
     private Optional<Product> productOptional;
 
     private void startUsersMock() {
-        product = new Product(ID, NAME, VALUE, RECIPES);
-        productDto = new ProductDto(ID, NAME, VALUE, RECIPES);
+        product = new Product(ID, NAME, VALUE);
+        productDto = new ProductDto(ID, NAME, VALUE);
         productOptional = Optional.of(new Product(ID, NAME, VALUE));
     }
 

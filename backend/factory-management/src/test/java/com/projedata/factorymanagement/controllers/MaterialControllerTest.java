@@ -41,8 +41,6 @@ class MaterialControllerTest extends ContainersEnvironment {
     public static final Integer STOCK = 20;
     public static final Set<Recipe> RECIPES = new HashSet<>();
     public static final int INDEX = 0;
-    public static final String MATERIAL_ALREADY_EXISTS = "Material already exists";
-    public static final String MATERIAL_NOT_FOUND = "Material Not Found";
 
     @InjectMocks
     private MaterialController materialController;
@@ -67,9 +65,9 @@ class MaterialControllerTest extends ContainersEnvironment {
     }
 
     private void startUsersMock() {
-        material = new Material(ID, NAME, STOCK, RECIPES);
-        materialDto = new MaterialDto(ID, NAME, STOCK, RECIPES);
-        optionalMaterial = Optional.of(new Material(ID, NAME, STOCK, RECIPES));
+        material = new Material(ID, NAME, STOCK);
+        materialDto = new MaterialDto(ID, NAME, STOCK);
+        optionalMaterial = Optional.of(new Material(ID, NAME, STOCK));
     }
 
     @Test
